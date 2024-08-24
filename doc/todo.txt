@@ -1,0 +1,14 @@
+- indicateur OS
+    . ajouter eleveur à l'équipe
+    . ajouter une evaluation delta ordinal vs moyenne des n premiers
+    . initialisation mu ch dependante de gain ch / cote
+    . delta mu dependant du nombre de place d'écart
+    - sg en mean vs prod : moins bien mais a retester sur plus longue periode
+
+- evaluation
+    x calculer des gains gagnants
+    . scrap rapport, pour calculer gain place et ajouter
+    . evaluation brute du 1c1
+    . evaluation automatique des quartiles d'un indicateur
+    . ecarter les courses peu connue (moyenne des sg)
+    

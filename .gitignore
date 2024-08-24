@@ -1,0 +1,7 @@
+/.venv
+/data
+/full_to_full.py
+/nettoyage.py
+/rapports.txt
+/test.csv
+/__pycache__
