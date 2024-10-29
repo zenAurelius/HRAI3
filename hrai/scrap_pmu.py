@@ -44,7 +44,7 @@ def get_participants_data(course, date):
 
     if response.status_code == 200:
         data = json.loads(response.content)
-        return data
+        return data.get('participants')
     else:
         print(f"Error fetching data for date {date}: {response.status_code}")
         return None
@@ -57,10 +57,12 @@ def process_participants_data(race, participants,datas):
     for p in participants:
         pf = flatdict.FlatDict({'ch':p}, delimiter="_")
         flatted.append(pf)
+        # init à vide les nouvelles clés
         n = len(list(datas.items())[0][1])
         for kc, vc in pf.items():
             if kc not in datas:
                 datas[kc] = [None for i in range(n)]
+    # pour chaque participant, ajoute à datas les valeurs pour le participant et la course
     for p in flatted :
         for k,v in datas.items():
             if k.startswith('cr_'):
@@ -75,21 +77,31 @@ def process_programme_data(programme, date, datas):
     for reunion in programme["reunions"]:
         flatraces = []
         flatmeteo = {}
+        # il n'y a des données météo que au niveau réunion
+        # on utilise FlatDict pour avoir un dict avec un seul niveau de profondeur
         if "meteo" in reunion :
+            # en passant à FlatDict un dict à une clé "cr" et toute les données dedans, 
+            # ça rajoute automatiquement cr_ devant toutes les clés "brutes"
             flatmeteo = flatdict.FlatDict({'cr':reunion["meteo"]}, delimiter="_")
         for course in reunion["courses"]:
             if course["discipline"] == 'ATTELE' :
+                # on utilise FlatDict pour avoir un dict avec un seul niveau de profondeur
                 cf = flatdict.FlatDict({'cr':course}, delimiter="_")
+                # on ajoute les données météo de la réunion a chaque courses
                 cf = dict(cf, **flatmeteo);
                 flatraces.append(cf)
+                # ici c'est pour traiter le cas où on découvre une nouvelle clé, il faut remplir les données
+                # de cette clé pour les entrées précédentes pour qu'à la fin chaque clé à le même nombre de valeurs
                 if datas :
                     n = len(list(datas.items())[0][1])
                 else:
                     n=0
+                # n est le nombre d'entrée précédente
                 for kr, vr in cf.items():
+                    # si la clé n'était pas dans les données, on commence par la créé a vide pour chaque course précédente
                     if kr not in datas:
                         datas[kr] = [None for i in range(n)]
-
+        # 
         for c in flatraces:
             participants = get_participants_data(c, date)
             if participants:
@@ -123,6 +135,7 @@ def scrap_result_year(y):
             process_programme_data(race_data, date_str, datas)
         if c_chunk > chunk and datas :
             n_chunk += 1
+            # DEBUG : pour verifier que chaque clé à le bon nombre de valeur
             for k,v in datas.items():
                 print(k + ' : ' + str(len(v)))
             df = pd.DataFrame(datas)
@@ -185,4 +198,5 @@ def scrap_rapport(file):
     rap = pd.DataFrame(datas)
     rap.to_csv(f'./data/{file}_rap.csv', index=False)
 
-scrap_rapport('pmu2016cc_os')
+#scrap_rapport('pmu2016cc_os')
+scrap_result_year(2017)

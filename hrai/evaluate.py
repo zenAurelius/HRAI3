@@ -24,12 +24,15 @@ def evaluate_indicateur(df, idname, ascending=False):
     ntot = len(df)
     # 1. evaluation brute en 1c1
     print('* evaluation brute 1c1')
+    # dummy : le 1 gagne
     ntrue = len(df[(df['ch_ordreArrivee_1'] < df['ch_ordreArrivee_2'])])
     nfalse = len(df[(df['ch_ordreArrivee_1'] > df['ch_ordreArrivee_2'])])
     print(f'[dummy] true = {100 * ntrue / ntot} - false = {100 * nfalse / ntot}')  
+    # cote : la plus petite cote gagne
     ntrue = 2*len(df[(df['ch_ordreArrivee_1'] < df['ch_ordreArrivee_2']) & (df['ch_dernierRapportDirect_rapport_1'] < df['ch_dernierRapportDirect_rapport_2'])])
     nfalse = 2*len(df[(df['ch_ordreArrivee_1'] < df['ch_ordreArrivee_2']) & (df['ch_dernierRapportDirect_rapport_1'] > df['ch_dernierRapportDirect_rapport_2'])])
     print(f'[cote] true = {100 * ntrue / ntot} - false = {100 * nfalse / ntot}')
+    # indicateur
     ntrue = 2*len(df[(df['ch_ordreArrivee_1'] < df['ch_ordreArrivee_2']) & (df[f'{idname}_1'] > df[f'{idname}_2'])])
     nfalse = 2*len(df[(df['ch_ordreArrivee_1'] > df['ch_ordreArrivee_2']) & (df[f'{idname}_1'] > df[f'{idname}_2'])])
     print(f'[{idname}] true = {100 * ntrue / ntot} - false = {100 * nfalse / ntot}')

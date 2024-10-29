@@ -16,9 +16,13 @@ def cartesian_product(df):
 
 
 def un_vs_un(df):
+    # regroupement par course
     grouped = df.groupby('aid_cr')
+    # combinaison 1 contre 1 par le produit cartesien
     crout = grouped.apply(lambda x : cartesian_product(x))
+    # reconstruit les index
     crout = crout.drop(columns=['aid_cr_1','aid_cr_2','index1','index2']).reset_index().drop(columns=['level_1'])
+    # retire les colonnes en double qui concerne la course
     crout = crout.drop(columns=[x for x in list(crout) if x.startswith('cr_') and x.endswith('_2')])
     crout = crout.rename(columns={x:x[:-2] for x in list(crout) if x.startswith('cr_') and x.endswith('_1')})
     return crout
@@ -35,27 +39,3 @@ def clean(df):
     df['ch_estgagnant'] = (df['ch_ordreArrivee'] == 1)
     return df
   
-
-
-'''# calculer une reference de course
-# Chemin vers le fichier CSV (dans un répertoire nommé "data")
-filename = 'pmu2014_1'
-
-# Charger le fichier CSV dans un DataFrame
-df = pd.read_csv(f'./data/{filename}.csv')
-
-df = clean(df)
-
-# les différentes colonnes qu'on veut garder, reparties dans des colonnes liées à la course, à la participation ou au calcul du target
-cr_col = ['aid_cr', 'cr_libelleCourt']
-ch_col = ['ch_nom', 'ch_numPmu']
-tg_col = ['ch_ordreArrivee']
-all_col = cr_col + ch_col + tg_col
-df = df[all_col]
-
-start_time = time.time()
-r = un_vs_un(df)
-elapsed_time = time.time() - start_time
-print(f"Elapsed time: {elapsed_time:.2f} seconds")
-
-r.to_csv('test.csv', index=False)'''

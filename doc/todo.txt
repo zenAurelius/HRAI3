@@ -11,4 +11,8 @@
     . evaluation brute du 1c1
     . evaluation automatique des quartiles d'un indicateur
     . ecarter les courses peu connue (moyenne des sg)
+
+- IA
+    . refaire une evaluation de base
+    . tester reseau bayesien
     
