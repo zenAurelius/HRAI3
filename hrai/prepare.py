@@ -27,6 +27,6 @@ def prepare(df):
 
     return df
 
-df = pd.read_csv('./data/2016.csv')
+df = pd.read_csv('./data/pmu2017.csv')
 df = prepare(df)
-df.to_csv('./data/pmu2016sos.csv', index=False)
+df.to_csv('./data/pmu2017_os.csv', index=False)

@@ -1,6 +1,7 @@
 
 import pandas as pd
 import numpy as np
+import time
 import skills
 
 
@@ -50,11 +51,11 @@ pct_place(result[result.Rang == 10.0])'''
 # df = df[(df.aid_pt_2 == '160101R01C0409') & (df.aid_pt_1 == '160101R01C0404')]
 # df.to_csv('./data/pmu2016_cas', index=False)
 
-df = pd.read_csv('./data/pmu2016_cas.csv')
-mu = {'F. NIVARD':52.5001247052428,'VERNOUILLET':25.0, 'VOSS RINGEAT':25.0, 'G. ROIG-BALAGUER':5.35705378196938}
-sg = {'F. NIVARD':6.16190376200572,'VERNOUILLET':8.33333333333333, 'VOSS RINGEAT':8.33333333333333, 'G. ROIG-BALAGUER':6.16190376200572}
-df = skills.calc_oskill(df, mu=mu, sg=sg)
-df.to_csv('./data/pmu2016_cas_os.csv', index=False)
+# df = pd.read_csv('./data/pmu2016_cas.csv')
+# mu = {'F. NIVARD':52.5001247052428,'VERNOUILLET':25.0, 'VOSS RINGEAT':25.0, 'G. ROIG-BALAGUER':5.35705378196938}
+# sg = {'F. NIVARD':6.16190376200572,'VERNOUILLET':8.33333333333333, 'VOSS RINGEAT':8.33333333333333, 'G. ROIG-BALAGUER':6.16190376200572}
+# df = skills.calc_oskill(df, mu=mu, sg=sg)
+# df.to_csv('./data/pmu2016_cas_os.csv', index=False)
 
 # df = pd.read_csv('./data/pmu2016cc_os.csv')
 # result = df[df.ch_dernierRapportDirect_rapport_1 > 0].groupby(['aid_cr', 'ch_nom_1']).first().reset_index()
@@ -63,3 +64,10 @@ df.to_csv('./data/pmu2016_cas_os.csv', index=False)
 # df = result[result.OS_R == 1.0]
 # print(df[['ch_dernierRapportDirect_rapport_1','OS_ORD_1']].describe())
 
+
+# Améliorer la lecture du fichier : traiter DtypeWarning
+start_time = time.time()
+df = pd.read_csv('./data/pmu2017_os.csv')
+elapsed_time = time.time() - start_time
+print(f"Elapsed time: {elapsed_time:.2f} seconds")
+print(df.describe())

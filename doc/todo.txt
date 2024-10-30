@@ -1,4 +1,5 @@
 - indicateur OS
+    x ajouter entraineur à l'équipe
     . ajouter eleveur à l'équipe
     . ajouter une evaluation delta ordinal vs moyenne des n premiers
     . initialisation mu ch dependante de gain ch / cote
