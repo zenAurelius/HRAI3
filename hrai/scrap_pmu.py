@@ -46,7 +46,7 @@ def get_participants_data(course, date):
         data = json.loads(response.content)
         return data.get('participants')
     else:
-        print(f"Error fetching data for date {date}: {response.status_code}")
+        print(f"Error fetching data for course {date}/R{course['cr_numReunion']}/C{course['cr_numOrdre']}: {response.status_code}")
         return None
 
 '''

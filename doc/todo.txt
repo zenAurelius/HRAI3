@@ -16,4 +16,7 @@
 - IA
     . refaire une evaluation de base
     . tester reseau bayesien
+
+- CLEAN FILE
+    . col 3 : df.cr_arriveeDefinitive[df.cr_arriveeDefinitive.isna()] = False
     

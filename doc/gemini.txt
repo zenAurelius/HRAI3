@@ -1,0 +1,44 @@
+import tensorflow as tf
+import tensorflow_probability as tfp
+
+# Données simulées
+features = tf.random.normal(shape=(100, 1))
+labels = 2 * features + 1 + tf.random.normal(shape=(100,))
+
+# Modèle bayésien linéaire
+model = tfp.layers.DenseFlipout(units=1, kernel_posterior_fn=tfp.layers.util.default_mean_field_normal_fn())
+
+# Compilation du modèle
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01),
+              loss=tf.keras.losses.MeanSquaredError())
+
+# Entraînement
+model.fit(features, labels, epochs=100)
+
+# Prédiction avec incertitude
+predictions = model.predict(features)
+variances = model.variances[0]
+
+
+import tensorflow as tf
+import tensorflow_probability as tfp
+
+# ... (chargement des données, etc.)
+
+# Fonction pour créer une couche d'entrée personnalisée
+class SkillLayer(tf.keras.layers.Layer):
+    def call(self, inputs):
+        means, stdevs = tf.split(inputs, 2, axis=-1)
+        skills = tfp.distributions.Normal(loc=means, scale=stdevs).sample()
+        return skills
+
+# Création du modèle
+model = tf.keras.Sequential([
+    tf.keras.layers.Input(shape=(4,)),  # age, sexe, gain, cote
+    SkillLayer(),  # Couche pour gérer l'incertitude sur skill
+    tfp.layers.DenseFlipout(units=16, activation='relu'),
+    tfp.layers.DenseFlipout(units=1, activation='sigmoid')
+])
+
+# Compilation et entraînement
+# ... (similaire à l'exemple précédent)

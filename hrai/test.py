@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import time
 import skills
+import combine
 
 
 
@@ -65,9 +66,23 @@ pct_place(result[result.Rang == 10.0])'''
 # print(df[['ch_dernierRapportDirect_rapport_1','OS_ORD_1']].describe())
 
 
-# Améliorer la lecture du fichier : traiter DtypeWarning
+# Améliorer la lecture du fichier : traiter DtypeWarning 85.85 seconds
 start_time = time.time()
-df = pd.read_csv('./data/pmu2017_os.csv')
+df = pd.read_csv('./data/pmu2017.csv')
 elapsed_time = time.time() - start_time
 print(f"Elapsed time: {elapsed_time:.2f} seconds")
-print(df.describe())
+
+start_time = time.time()
+df = combine.clean(df)
+elapsed_time = time.time() - start_time
+print(f"Elapsed time: {elapsed_time:.2f} seconds")
+df.to_csv('./data/pmu2017_c.csv', index=False)
+
+start_time = time.time()
+df = combine.un_vs_un(df)
+elapsed_time = time.time() - start_time
+print(f"Elapsed time: {elapsed_time:.2f} seconds")
+df.to_csv('./data/pmu2017_v.csv', index=False)
+
+# df = pd.read_csv('./data/pmu2017_os_s.csv')
+# print(df.dtypes)
