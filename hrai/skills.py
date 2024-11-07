@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from statistics import NormalDist
+#from statistics import NormalDist
 
 '''df = pd.read_csv('./data/volcania_p.csv')
 df =df[['aid_cr', 'ch_nom_1', 'ch_driver_1', 'ch_ordreArrivee_1', 'ch_nom_2', 'ch_driver_2', 'ch_ordreArrivee_2']]
@@ -12,30 +12,28 @@ df.to_csv('./data/volcania_s.csv', index=False)'''
 b_sg = {}
 b_mu = {}'''
 
-_normal = NormalDist()
+#_normal = NormalDist()
 
-def calc_oskill_bycr(df, os_sg, os_mu):
+
+def calc_oskill_bycr(df, os_sg, os_mu, teams_members):
     
+    # teams_member = ['pis_cheval', 'pis_driver', 'pis_entraineur']
     dsg = float(25/3)
     dmu = float(25)
     tsq = float(25.0 / 300.0) ** 2
     for i in range(1, 3):
         # init sigma / mu -ok
-        df[f'OS_SG_CH{i}'] = df[f'ch_nom_{i}'].astype(str).map(os_sg).fillna(dsg)
-        df[f'OS_SG_DV{i}'] = df[f'ch_driver_{i}'].astype(str).map(os_sg).fillna(dsg)
-        df[f'OS_SG_EN{i}'] = df[f'ch_entraineur_{i}'].astype(str).map(os_sg).fillna(dsg)
-        df[f'OS_MU_CH{i}'] = df[f'ch_nom_{i}'].astype(str).map(os_mu).fillna(dmu)
-        df[f'OS_MU_DV{i}'] = df[f'ch_driver_{i}'].astype(str).map(os_mu).fillna(dmu)
-        df[f'OS_MU_EN{i}'] = df[f'ch_entraineur_{i}'].astype(str).map(os_mu).fillna(dmu) 
+        for mb in teams_members:
+            df[f'OS_SG_{mb}_{i}'] = df[f'{mb}_{i}'].astype(str).map(os_sg).fillna(dsg)
+            df[f'OS_MU_{mb}_{i}'] = df[f'{mb}_{i}'].astype(str).map(os_mu).fillna(dmu)
 
-        # Correct Sigma With Tau -ok
-        df[f'S_SGC_CH{i}'] = np.sqrt(df[f'OS_SG_CH{i}'] ** 2 + tsq)
-        df[f'S_SGC_DV{i}'] = np.sqrt(df[f'OS_SG_DV{i}'] ** 2 + tsq)
-        df[f'S_SGC_EN{i}'] = np.sqrt(df[f'OS_SG_DV{i}'] ** 2 + tsq)
+            # Correct Sigma With Tau -ok
+            df[f'S_SGC_{mb}_{i}'] = np.sqrt(df[f'OS_SG_{mb}_{i}'] ** 2 + tsq)
 
-        # Sigma et Mu de chaque equipe = somme des Sigma/Mu de chaque players -ok
-        df[f'S_SGSQ_{i}'] = df[f'S_SGC_CH{i}'] ** 2 + df[f'S_SGC_DV{i}'] ** 2 + df[f'S_SGC_EN{i}'] ** 2 
-        df[f'S_MU_{i}'] = df[f'OS_MU_CH{i}'] + df[f'OS_MU_DV{i}'] + df[f'OS_MU_EN{i}']
+        # Sigma et Mu de chaque equipe = somme des Sigma/Mu de chaque team members -ok
+        df[f'S_SGSQ_{i}'] = sum([df[f'S_SGC_{x}_{i}'] ** 2 for x in teams_members])
+        df[f'S_MU_{i}'] = sum([df[f'S_MU_{x}_{i}'] ** 2 for x in teams_members])
+
         df[f'OS_ORD_{i}'] = df[f'S_MU_{i}'] - 3 * np.sqrt(df[f'S_SGSQ_{i}'])
   
     # Calcul "C" = sqrt(somme pour toutes les equipes de Sigma^2 + beta^2) -ok
@@ -96,7 +94,8 @@ def calc_oskill_bycr(df, os_sg, os_mu):
 
     #prob win
     y = (df['S_MU_1'] - df['S_MU_2']) / np.sqrt(df['S_SGSQ_1'] + df['S_SGSQ_2'] + 4 * bsq)
-    df['OS_PWIN_1'] = y.apply(lambda x : _normal.cdf(x))
+    #df['OS_PWIN_1'] = y.apply(lambda x : _normal.cdf(x))
+    df['OS_PWIN_1'] = 1
 
     to_drop = [c for c in df.columns if c.startswith('S_')]
     df.drop(to_drop, axis=1, inplace=True)
