@@ -37,7 +37,7 @@ def clean(df):
     print(df.head())
 
     # Ne garde que les courses "arrivée", pas les "annulée"
-    df = df[df.cr_categorieStatut == 'ARRIVEE']
+    df = df[df.cr_categorieStatut == 'ARRIVEE'].copy()
     
     # course
     df['rfs_date'] =  pd.to_datetime(df['cr_heureDepart'], unit='ms').dt.strftime("%y%m%d")
@@ -60,40 +60,40 @@ def clean(df):
     df['rfb_amateurs'] = df.cr_categorieParticularite.str.contains('AMATEURS', regex=False)
 
     # participation
-    df['pis_chNom'] = df['ch_nom']
+    df['pis_cheval'] = df['ch_nom']
     df['pis_proprietaire'] = df['ch_proprietaire']
     df['pis_entraineur'] = df['ch_entraineur']
     df['pis_driver'] = df['ch_driver']
-    df['pis_eleveur'] = df['ch_eleveur']
-    df['pfi_age'] = df['ch_age']
-    df['pfs_sexe'] = df['ch_sexe']
-    df['pfs_race'] = df['ch_race']
+    df['pis_eleveur'] = df['ch_eleveur'].replace(np.nan, 'Inconnu')
+    df['pfi_chAge'] = df['ch_age']
+    df['pfs_chSexe'] = df['ch_sexe']
+    df['pfs_chRace'] = df['ch_race']
     df['pib_partant'] = df.ch_statut == 'PARTANT'
     df['pfb_oeilleres'] = df['ch_oeilleres'] != 'SANS_OEILLERES'
-    df['pfb_driverChange'] = df['ch_driverChange']
-    df['pfb_inedit'] = df['ch_indicateurInedit']
-    df['pfi_nbCourses'] = df['ch_nombreCourses']
-    df['pfi_nbVictoires'] = df['ch_nombreVictoires']
-    df['pfi_nbPlaces'] = df['ch_nombrePlaces']
-    df['pfi_nbSecond'] = df['ch_nombrePlacesSecond']
-    df['pfi_nbTroisieme'] = df['ch_nombrePlacesTroisieme']
-    df['pff_gainTotal'] = df['ch_gainsParticipant_gainsCarriere']
-    df['pff_gainVictoire'] = df['ch_gainsParticipant_gainsVictoires']
-    df['pff_gainPlace'] = df['ch_gainsParticipant_gainsPlace']
-    df['pff_gainAnnee'] = df['ch_gainsParticipant_gainsAnneeEnCours']
-    df['pff_gainAnneePrec'] = df['ch_gainsParticipant_gainsAnneePrecedente']
-    df['pfb_estJumentPleine'] = df['ch_jumentPleine']
+    df['pfb_dvChange'] = df['ch_driverChange']
+    df['pfb_chInedit'] = df['ch_indicateurInedit']
+    df['pfi_chNbCourses'] = df['ch_nombreCourses']
+    df['pfi_chNbVictoires'] = df['ch_nombreVictoires']
+    df['pfi_chNbPlaces'] = df['ch_nombrePlaces']
+    df['pfi_chNbSecond'] = df['ch_nombrePlacesSecond']
+    df['pfi_chNbTroisieme'] = df['ch_nombrePlacesTroisieme']
+    df['pff_chGainTotal'] = df['ch_gainsParticipant_gainsCarriere']
+    df['pff_chGainVictoire'] = df['ch_gainsParticipant_gainsVictoires']
+    df['pff_chGainPlace'] = df['ch_gainsParticipant_gainsPlace']
+    df['pff_chGainAnnee'] = df['ch_gainsParticipant_gainsAnneeEnCours']
+    df['pff_chGainAnneePrec'] = df['ch_gainsParticipant_gainsAnneePrecedente']
+    df['pfb_chEstJumentPleine'] = df['ch_jumentPleine']
     df['pff_handicap'] = ((df['ch_handicapDistance'] - df['cr_distance'])/df['cr_distance'])
     df['pff_rapportDirect'] = df['ch_dernierRapportDirect_rapport']
-    df['pff_tendanceDirect'] = df['ch_dernierRapportDirect_indicateurTendance']
+    df['pff_tendanceDirect'] = df['ch_dernierRapportDirect_indicateurTendance'].replace(np.nan, ' ')
     df['pff_permutationDirect'] = df['ch_dernierRapportDirect_permutation']
-    df['pff_favorisDirect'] = df['ch_dernierRapportDirect_favoris']
-    df['pff_priseDirect'] = df['ch_dernierRapportDirect_grossePrise']
+    df['pff_favorisDirect'] = df['ch_dernierRapportDirect_favoris'].replace(np.nan, False)
+    df['pff_priseDirect'] = df['ch_dernierRapportDirect_grossePrise'].replace(np.nan, False)
     df['pff_rapportReference'] = df['ch_dernierRapportReference_rapport']
-    df['pff_tendanceReference'] = df['ch_dernierRapportReference_indicateurTendance']
+    df['pff_tendanceReference'] = df['ch_dernierRapportReference_indicateurTendance'].replace(np.nan, ' ')
     df['pff_permutationReference'] = df['ch_dernierRapportReference_permutation']
-    df['pff_favorisReference'] = df['ch_dernierRapportReference_favoris']
-    df['pff_priseReference'] = df['ch_dernierRapportReference_grossePrise']
+    df['pff_favorisReference'] = df['ch_dernierRapportReference_favoris'].replace(np.nan, False)
+    df['pff_priseReference'] = df['ch_dernierRapportReference_grossePrise'].replace(np.nan, False)
     df['pfs_deferre'] = df['ch_deferre']
     df['pfi_placeCorde'] = df['ch_placeCorde']
     df['pfs_ecurie'] = df['ch_ecurie']
