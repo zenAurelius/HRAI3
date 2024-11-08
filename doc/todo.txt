@@ -1,10 +1,20 @@
 - indicateur OS
+    x evaluer gain pour gagnant
+    x evaluer en 1c1
     x ajouter entraineur à l'équipe
     . ajouter eleveur à l'équipe
+    . utilisé un seuil pour les engagements (proba > 0.7,...)
     . ajouter une evaluation delta ordinal vs moyenne des n premiers
     . initialisation mu ch dependante de gain ch / cote
     . delta mu dependant du nombre de place d'écart
-    - sg en mean vs prod : moins bien mais a retester sur plus longue periode
+    . sg en mean vs prod : moins bien mais a retester sur plus longue periode
+    . evaluation avec des seuils automatique par quartile
+    . obtenir une proba de win à partir de os à la place de ord, permettra de poser un seuil
+
+. Amélioration de OS
+    x aggrégation par somme ou multiplication
+    . initialisation différentielle de CH
+    . variation du dx avec le nombre de place de différence
 
 - evaluation
     x calculer des gains gagnants
@@ -16,6 +26,9 @@
 - IA
     . refaire une evaluation de base
     . tester reseau bayesien
+
+. RL
+    . scénario de maximisation d'une bankroll 
 
 - CLEAN FILE
     . col 3 : df.cr_arriveeDefinitive[df.cr_arriveeDefinitive.isna()] = False
