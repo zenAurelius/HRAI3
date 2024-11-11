@@ -25,19 +25,6 @@ pct_place(result[result.Rang == 3.0])
 pct_place(result[result.Rang == 10.0])'''
 
 
-# from openskill.models import PlackettLuce
-# model = PlackettLuce()
-# ch1 = model.rating(name='ch_1',mu=25, sigma=8.33333333)
-# dv1 = model.rating(name='dv_1',mu=52.5001247052428, sigma=6.16190376200572)
-# ch2 = model.rating(name='ch_2',mu=25, sigma=8.3333333)
-# dv2 = model.rating(name='dv_2',mu=5.35705378196938, sigma=6.16190376200572)
-# team1 = [ch1, dv1]
-# team2 = [ch2, dv2]
-# #[team1, team2] = model.rate([team1, team2],ranks=[1,1])
-# #[team1, team2] = model.rate([team1, team2])
-# print(model.predict_win([team1, team2]))
-
-
 # df = pd.read_csv('./data/pmu2016cc_os.csv')
 # # df = df[df.ch_driver_1 == 'E. RAFFIN']
 # # df.to_csv('./data/pmu2016m.csv')
@@ -52,12 +39,6 @@ pct_place(result[result.Rang == 10.0])'''
 # df = df[(df.aid_pt_2 == '160101R01C0409') & (df.aid_pt_1 == '160101R01C0404')]
 # df.to_csv('./data/pmu2016_cas', index=False)
 
-# df = pd.read_csv('./data/pmu2016_cas.csv')
-# mu = {'F. NIVARD':52.5001247052428,'VERNOUILLET':25.0, 'VOSS RINGEAT':25.0, 'G. ROIG-BALAGUER':5.35705378196938}
-# sg = {'F. NIVARD':6.16190376200572,'VERNOUILLET':8.33333333333333, 'VOSS RINGEAT':8.33333333333333, 'G. ROIG-BALAGUER':6.16190376200572}
-# df = skills.calc_oskill(df, mu=mu, sg=sg)
-# df.to_csv('./data/pmu2016_cas_os.csv', index=False)
-
 # df = pd.read_csv('./data/pmu2016cc_os.csv')
 # result = df[df.ch_dernierRapportDirect_rapport_1 > 0].groupby(['aid_cr', 'ch_nom_1']).first().reset_index()
 # print(len(result))
@@ -66,23 +47,40 @@ pct_place(result[result.Rang == 10.0])'''
 # print(df[['ch_dernierRapportDirect_rapport_1','OS_ORD_1']].describe())
 
 
-# Améliorer la lecture du fichier : traiter DtypeWarning 85.85 seconds
-start_time = time.time()
-df = pd.read_csv('./data/pmu2017.csv')
-elapsed_time = time.time() - start_time
-print(f"Elapsed time: {elapsed_time:.2f} seconds")
+# Améliorer la lecture du fichier : traiter DtypeWarning 85 seconds => 10 seconds
+''' CLEAN(C) FROM RAW '''
+# start_time = time.time()
+# df = pd.read_csv('./data/pmu2016.csv')
+# elapsed_time = time.time() - start_time
+# print(f"Elapsed time: {elapsed_time:.2f} seconds")
 
-start_time = time.time()
-df = combine.clean(df)
-elapsed_time = time.time() - start_time
-print(f"Elapsed time: {elapsed_time:.2f} seconds")
-df.to_csv('./data/pmu2017_c.csv', index=False)
+# start_time = time.time()
+# df = combine.clean(df)
+# elapsed_time = time.time() - start_time
+# print(f"Elapsed time: {elapsed_time:.2f} seconds")
+# df.to_csv('./data/pmu2016_c.csv', index=False)
 
+''' CONBINE(V) FROM CLEAN(C) '''
+# start_time = time.time()
+# df = pd.read_csv('./data/pmu2016_c.csv')
+# elapsed_time = time.time() - start_time
+# print(f"Elapsed time: {elapsed_time:.2f} seconds")
+# start_time = time.time()
+# df = combine.un_vs_un(df)
+# elapsed_time = time.time() - start_time
+# print(f"Elapsed time: {elapsed_time:.2f} seconds")
+# df.to_csv('./data/pmu2016_v.csv', index=False)
+
+''' SKILLED(OS) FROM COMBINE(V) '''
 start_time = time.time()
-df = combine.un_vs_un(df)
+df = pd.read_csv('./data/pmu2016_v.csv')
 elapsed_time = time.time() - start_time
 print(f"Elapsed time: {elapsed_time:.2f} seconds")
-df.to_csv('./data/pmu2017_v.csv', index=False)
+start_time = time.time()
+df = skills.calc_oskill(df,teams_members=['pis_cheval', 'pis_driver'])
+elapsed_time = time.time() - start_time
+print(f"Elapsed time: {elapsed_time:.2f} seconds")
+df.to_csv('./data/pmu2016_os.csv', index=False)
 
 # df = pd.read_csv('./data/pmu2017_os_s.csv')
 # print(df.dtypes)
