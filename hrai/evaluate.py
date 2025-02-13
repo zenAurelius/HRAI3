@@ -73,6 +73,6 @@ def evaluate_indicateur(df, idname, ascending=False):
 
 ##df[df.ch_nom_1 == 'VALEUR DANOVER'].to_csv('test.csv')
 
-df = pd.read_csv('./data/pmu2016_os.csv')
+df = pd.read_csv('./data/pmu2016_os2.csv')
 evaluate_indicateur(df, 'pff_ord')
 

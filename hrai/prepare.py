@@ -29,4 +29,4 @@ def prepare(df):
 
 df = pd.read_csv('./data/pmu2017.csv')
 df = prepare(df)
-df.to_csv('./data/pmu2017_os.csv', index=False)
+df.to_csv('./data/pmu2017_os2.csv', index=False)

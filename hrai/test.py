@@ -80,7 +80,7 @@ start_time = time.time()
 df = skills.calc_oskill(df,teams_members=['pis_cheval', 'pis_driver'])
 elapsed_time = time.time() - start_time
 print(f"Elapsed time: {elapsed_time:.2f} seconds")
-df.to_csv('./data/pmu2016_os.csv', index=False)
+df.to_csv('./data/pmu2016_os2.csv', index=False)
 
 # df = pd.read_csv('./data/pmu2017_os_s.csv')
 # print(df.dtypes)

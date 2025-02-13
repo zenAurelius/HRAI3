@@ -29,6 +29,33 @@ def calc_oskill_bycr(df, os_sg, os_mu, teams_members, debug=False):
             # Correct Sigma With Tau -ok
             df[f'S_SGC_{mb}_{i}'] = np.sqrt(df[f'pff_sg_{mb}_{i}'] ** 2 + tsq)
 
+        # rectification du mu de pis_cheval à l'init inconnu
+        df.loc[
+            (df['pff_mu_pis_cheval_1'] == 25) &
+            (df['pff_chGainTotal_1'] / df['pfi_chNbCourses_1'] < 110000),
+            'pff_mu_pis_cheval_1'
+        ] = 24
+
+        df.loc[
+            (df['pff_mu_pis_cheval_1'] == 25) &
+            (df['pff_chGainTotal_1'] / df['pfi_chNbCourses_1'] >= 110000) &
+            (df['pff_chGainTotal_1'] / df['pfi_chNbCourses_1'] < 174000),
+            'pff_mu_pis_cheval_1'
+        ] = 29
+
+        df.loc[
+            (df['pff_mu_pis_cheval_1'] == 25) &
+            (df['pff_chGainTotal_1'] / df['pfi_chNbCourses_1'] >= 174000) &
+            (df['pff_chGainTotal_1'] / df['pfi_chNbCourses_1'] < 285000),
+            'pff_mu_pis_cheval_1'
+        ] = 32
+
+        df.loc[
+            (df['pff_mu_pis_cheval_1'] == 25) &
+            (df['pff_chGainTotal_1'] / df['pfi_chNbCourses_1'] >= 285000),
+            'pff_mu_pis_cheval_1'
+        ] = 36
+
         # Sigma et Mu de chaque equipe = somme des Sigma/Mu de chaque team members -ok
         df[f'pff_sgsq_{i}'] = sum([df[f'S_SGC_{x}_{i}'] ** 2 for x in teams_members])
         df[f'S_MU_{i}'] = sum([df[f'pff_mu_{x}_{i}'] for x in teams_members])
